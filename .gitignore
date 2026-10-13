@@ -1,0 +1,34 @@
+# ---- Third-party / app binaries (not part of this project) ----
+/VRoidStudio 2.14.0/
+/run/
+
+# ---- Generated reverse-engineering output ----
+/output/
+/tools/Il2CppDumper/
+/tools/Il2CppDumper.zip
+*.zip
+
+# ---- Build artifacts ----
+/dist/
+bin/
+obj/
+*.user
+
+# ---- Local-only files (not part of the project) ----
+/models/
+/opencode.json
+
+# ---- Generated runtime artifacts (BepInEx / plugin) ----
+run/game/catalog_*.json
+run/game/category_catalog.json
+run/game/ui_events.jsonl
+run/game/dump_catalog
+*.log
+
+# ---- IDE ----
+.vs/
+.idea/
+
+# ---- Python ----
+__pycache__/
+*.pyc
