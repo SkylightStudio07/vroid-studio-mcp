@@ -2,6 +2,8 @@
 
 [English](README.md) | [Русский](README.ru.md)
 
+![vroid-studio-mcp promo](docs/media/promo.gif)
+
 `vroid-studio-mcp` is an adapter between **VRoid Studio 2.14.0** and AI agents. It lets an MCP client
 (Claude Desktop, OpenCode, …) create and edit characters in the real editor: pick presets, move
 sliders, change colors, frame the camera, inspect the result, and save — all under the agent's
