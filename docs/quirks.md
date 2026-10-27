@@ -42,6 +42,12 @@ call the API, see `plugin/VroidStudioMcp/Editor/` and `docs/architecture.md`.
 
 ## Render and camera
 
+- **A correct save/reopen can preserve incorrect geometry.** In a collar study, XY projection onto
+  alpha-visible shirt triangles selected rear faces where the front opening had no shirt. Forced
+  boundary snapping stretched leaves through the torso despite exact runtime/package agreement.
+  Constrain projection by side, neighborhood and continuity; review actual geometry, clearance and
+  oblique silhouettes. See the [character harness](character-editing-harness.md#7-accessories-the-v43-collar-failure-and-v44-repair).
+
 - **The preview is taken from the layer's 3D camera.** `NormalLayerCamera` renders the 3D viewport of the avatar into its
   `targetTexture` — without UI and exactly the viewport size, so `screenshot` reads this RT in full
   (no crop needed; size-stable). `MainCamera` is the UI orthographic camera for the whole window; if you take its RT,
@@ -167,6 +173,8 @@ call the API, see `plugin/VroidStudioMcp/Editor/` and `docs/architecture.md`.
   path `Hairstyle/Base Hair/Main Color`); the global `Main`/`Emission` do not apply to it and are not
   output. In the entire Hairstyle section there are no numeric parameters: the shape sliders live in a separate
   editor (`VRoid.Studio.HairEditor.DesignEditor...ParameterViewModel`) and are not output externally.
+  The separate experimental `hair_*` tools edit brush control points through VRoidCore history
+  commands; they do not add numeric sliders to the category parameter interface.
 
 ## Clothing (Outfit)
 
@@ -288,5 +296,54 @@ call the API, see `plugin/VroidStudioMcp/Editor/` and `docs/architecture.md`.
   with a model open it returns an error until `main_menu`.
 - **`state.selectors`** is zeroed outside edit, and the `Selectors` registry is cleared on `BackToModelSelect`
   (otherwise "sticky" 4 remain and break the readiness of `open`/`create`).
-- **Accessories** (no presets selector) and **Look** — outside scope; **TextureEditor** (2D),
-  the hairstyle editor, Custom presets — also outside scope.
+- **Accessories** (no presets selector) and **Look** — outside scope. The 2D TextureEditor UI and
+  hairstyle design editor are not automated. Editable raster layers are exposed via engine queries
+  and history commands; initial verification covers iris export/import/restore. Custom items have
+  read-only discovery only. Brush hair point edits also use engine queries/history commands, without
+  entering or automating the design-editor UI. See [texture findings](texture-interop-findings.md)
+  and [hair findings](hair-editing-plan.md).
+
+## Hair point edits
+
+- `MoveBrushHairStrandControlPointCommand` is a drag-style history command. Complete the API edit
+  with `Context.FlushPendingHistory(false)`; do not call command rollback methods directly.
+- Control points include position, normal and UV. Position-only edits must preserve the latter
+  fields and all other points. The native point coordinates are not a screen/world-space API.
+- Stock front hair showed persistent 9–24-pixel frame differences at MSAA 4, including before any
+  edit. The verified development configuration is MSAA 1 with render scale 2. Do not accept a
+  non-stable frame as a successful stable-frame check, or silently change user quality settings.
+- Point backups are scoped to a strand/result and model session. Restore must reject intervening
+  point edits; a blind history undo could revert the user's unrelated work. Save a model checkpoint
+  for process-loss recovery. Point moves do not enforce collision avoidance or curve smoothness.
+- For save/reopen preview comparisons, frame the same region after the final mutation and again
+  after opening. Opening resets the camera; a preview kept from an earlier framing is not the
+  canonical modified-model view. The width/profile harness explicitly re-frames before capture.
+
+## Character expression and guide experiments
+
+- Expression settings persist in the model, while `FaceEditor.ViewModel.UpdateExpression` applies
+  a temporary preview to the face renderer. Reopening requires selecting that preview again.
+  `ResetExpression` clears temporary mesh weights without resetting saved expression settings.
+- Expression collections require a typed IL2CPP `IEnumerable<T>` cast and indexed list copy.
+  Generic reflection enumeration can silently return an empty list for these native collections.
+- Brush-group flip, guide and position-offset commands need `FlushPendingHistory(false)` and
+  completed model rebuilds. Modifiers passed as IL2CPP delegates must stay rooted for native
+  history/undo. Do not free them merely because the initial command completed.
+- Back presets mix long guides with short crown guides. Scaling every guide produces scalp
+  spikes. The raw length experiment only selects guides with current height at least 0.6;
+  point coordinates and normals remain native data, and collisions are not resolved.
+- Opposite native group offsets can restore the numeric offset while leaving reprojected control
+  points/normals. Do not test or advertise arithmetic inversion as exact recovery; reopen the
+  pre-operation model checkpoint and compare complete geometry instead.
+
+## Texture round trips
+
+- Native `GetRasterLayerContentQuery` bytes round-trip through Unity PNG encoding/decoding without
+  an orientation flip. Read-back compares raw RGBA, since PNG encoders can encode identical pixels
+  differently. Color parameters are separate from these pixels and still tint the rendered model.
+- Wait for `IsUpdatingModel` completion after `LoadImageToEditableImageRasterLayerCommand`, then
+  compare layer content and stable frames. A generic preset notification alone is insufficient.
+- In the Windows development environment, an app initially launched with a hidden window returned
+  uniform black viewport captures even while models updated. A normally displayed window rendered
+  correctly. Three identical black frames are not evidence of a correct preview. Texture commands
+  and the bridge reject empty/uniform previews; this does not guarantee artistic or UV correctness.

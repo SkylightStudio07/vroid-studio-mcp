@@ -17,6 +17,7 @@ obj/
 # ---- Local-only files (not part of the project) ----
 /models/
 /opencode.json
+/.codex-remote-attachments/
 
 # ---- Generated runtime artifacts (BepInEx / plugin) ----
 run/game/catalog_*.json

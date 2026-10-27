@@ -9,6 +9,14 @@ control, while you keep working in VRoid Studio as usual.
 
 ## Features
 
+- **Experimental eye makeup** — explicit alpha replacement can change eyeliner opacity and
+  silhouette, with exact RGBA backup/restore. Stock eyeliner, eyelash and FacePaint eyeshadow
+  edits, visible render changes and save/reopen are verified. FacePaint assets can be prepared
+  as editable layers with a model checkpoint. [Scope and examples](docs/makeup-editing.md).
+- **Experimental hair geometry editing** — inspect hair groups/strands, move a non-root brush
+  control point, and restore the edit. Includes backups, revision checks and render verification.
+  Save/reopen is tested on a front-hair fixture; automatic hairstyle reconstruction and guide
+  editing are not implemented. [Contract and rendering requirements](docs/external-api.md#hair-geometry).
 - **Character creation and editing** — create or open a character, let the agent build it, and save
   it (`.vroid`).
 - **Full editor control** — work through the editor as a person would: sections (`Face`,
@@ -101,11 +109,22 @@ If the preview feels slow, set `render_scale` to `1`.
 The address (and these toggles) can also be edited inside VRoid Studio: open **Settings** from the
 account icon and look for the **Programmatic Control (MCP)** section at the top.
 
+## Experimental texture editing and ComfyUI
+
+Editable-layer discovery, PNG export/import and backup restoration are available through MCP.
+The first verified target is an iris layer: real ComfyUI/Qwen editing, changed 3D preview, exact
+restore and `.vroid` save/reopen have been tested. A separate Python bridge supports configurable
+API workflows, preview-only review, alpha validation and a deterministic mock mode.
+See [setup and commands](tools/comfy-bridge/README.md) and [verification/limits](docs/texture-interop-findings.md).
+Custom items currently support read-only discovery; import/apply and VRM export remain unimplemented.
+
 ## Documentation for developers
 
 - [docs/internal-api.md](docs/internal-api.md) — the reverse-engineered internal API of VRoid Studio.
 - [docs/external-api.md](docs/external-api.md) — the control surface exposed to clients (MCP).
 - [docs/architecture.md](docs/architecture.md) — how the plugin is built and how to extend it.
+- [docs/character-editing-harness.md](docs/character-editing-harness.md) — reference-driven character
+  editing, lessons from visual failures, verification gates and session records.
 - [docs/quirks.md](docs/quirks.md) — engine behaviours that are easy to get wrong.
 - [docs/macos.md](docs/macos.md) — macOS status.
 - [AGENTS.md](AGENTS.md) — build/test workflow and conventions.
@@ -118,6 +137,13 @@ that acts as a character artist.
 macOS is **still under research** and not part of this release. On Apple Silicon it is achievable
 (the plugin itself is platform-independent), but it needs BepInEx/Il2CppInterop builds that are not
 yet part of BepInEx upstream. See [docs/macos.md](docs/macos.md).
+
+## Experimental Blender face bridge
+
+Same-source Blender eye/face studies can be returned to the app with `face_import`, saved inside
+a `.vroid`, and restored on reopen. **The MCP plugin is required to display the custom face.**
+This is not a plugin-free native mesh importer; VRM export integration is unverified.
+See the [workflow and limitations](docs/face-bridge.md) and [API](docs/external-api.md#blender-face-bridge).
 
 ## AI disclosure
 

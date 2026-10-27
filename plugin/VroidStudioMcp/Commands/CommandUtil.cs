@@ -11,6 +11,23 @@ public static class CommandUtil
 {
     public static IEnumerator Done() { yield break; }
 
+    internal static IEnumerator StablePreview(Action<string> completed)
+    {
+        string previous = null;
+        int stable = 0;
+        float elapsed = 0;
+        while (stable < 3 && elapsed < 15f)
+        {
+            yield return null;
+            elapsed += UnityEngine.Time.unscaledDeltaTime;
+            if (VroidState._modelUpdating) { stable = 0; continue; }
+            string hash = Screenshot.ShotHash();
+            stable = !Screenshot.LastHasContent || hash == "null" || hash == "no-rt" ? 0 : hash == previous ? stable + 1 : 1;
+            previous = hash;
+        }
+        completed(stable >= 3 ? previous : null);
+    }
+
     // Waits use UNSCALED time on purpose: a modal dialog may set Time.timeScale = 0 (e.g. while a
     // model loads), and scaled deltaTime then freezes -> the handler never completes and the whole
     // command queue stalls. Unscaled time keeps the control channel alive.

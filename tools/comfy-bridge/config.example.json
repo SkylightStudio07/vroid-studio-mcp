@@ -1,0 +1,10 @@
+{
+  "vroid_mcp_url": "http://127.0.0.1:17891/mcp",
+  "comfyui_url": "http://127.0.0.1:8190",
+  "workspace_root": "../../run/game/texture-workspace",
+  "comfyui_timeout_seconds": 900,
+  "output_node": "3",
+  "bindings": {
+    "source_texture": {"node_id": "1", "input": "image"}
+  }
+}

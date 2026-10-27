@@ -9,6 +9,9 @@ public static class TestRunner
     private static readonly Dictionary<string, Func<VroidTest>> Factories = new()
     {
         ["selftest"] = () => new SelfTest(),
+        ["texture_roundtrip"] = () => new TextureRoundTripTest(),
+        ["face_mesh_export"] = () => new FaceMeshExportTest(),
+        ["hair_roundtrip"] = () => new HairRoundTripTest(),
         ["scopetest"] = () => new ScopeTest(),
         ["icons"] = () => new IconTest(),
         ["colormap"] = () => new ColorMap(),

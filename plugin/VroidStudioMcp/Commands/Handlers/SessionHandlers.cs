@@ -139,6 +139,8 @@ public static class SessionHandlers
         {
             // save-as: write the current model to an explicit path (no file dialog)
             var win = WinePaths.ToDos(path);
+            if (Directory.Exists(win))
+            { ctx.Error = $"save failed: destination is a directory: {WinePaths.ToHost(win)}"; yield break; }
             if (mah == null) { ctx.Error = "save: action handler not captured"; yield break; }
             bool ok = false;
             try { ok = Invoke(mah, "SaveSync", win, true) is bool b && b; }

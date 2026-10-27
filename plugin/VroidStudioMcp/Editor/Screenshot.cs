@@ -30,6 +30,7 @@ public static class Screenshot
     private static byte[] _lastUiPng;
     internal static byte[] LastCanonicalPng => _lastCanonicalPng;
     internal static byte[] LastUiPng => _lastUiPng;
+    internal static bool LastHasContent { get; private set; }
 
     public static string ShotHash()
     {
@@ -77,6 +78,8 @@ public static class Screenshot
     /// the PNG in _lastCanonicalPng for inline (base64) consumers.</summary>
     public static void CaptureScreenshot(bool writeFiles = true)
     {
+        _lastCanonicalPng = null;
+        LastHasContent = false;
         try
         {
             // the 3D-preview RenderTexture (no UI), rendered by the avatar CameraGroup
@@ -116,6 +119,14 @@ public static class Screenshot
             var tex = new UnityEngine.Texture2D(w, h, UnityEngine.TextureFormat.RGB24, false);
             tex.ReadPixels(cr, 0, 0);
             tex.Apply();
+            var samplePixels = tex.GetPixels32();
+            var firstPixel = samplePixels[0];
+            for (int i = 1; i < samplePixels.Length; i++)
+            {
+                var p = samplePixels[i];
+                if (p.r != firstPixel.r || p.g != firstPixel.g || p.b != firstPixel.b)
+                { LastHasContent = true; break; }
+            }
             if (writeFiles) SaveVariants(tex, temporary);
             else
             {

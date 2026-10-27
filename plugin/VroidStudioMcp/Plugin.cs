@@ -199,6 +199,7 @@ public class Plugin : BasePlugin
         // the renderer (see Runtime/WindowBackground.cs).
         WindowBackground.Tick();
         RenderQuality.Tick();
+        FaceBridgeRuntime.Tick();
         if (!UnityEngine.Application.runInBackground) UnityEngine.Application.runInBackground = true;
         _refreshDepth = 0;
         if (!_tickSeen) { _tickSeen = true; PluginLog.LogInfo("main-thread ticker running"); }
