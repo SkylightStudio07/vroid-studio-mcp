@@ -39,6 +39,14 @@ plugin/VroidStudioMcp/
     MessagesI18n.cs         // overlay for engine string substitution + message table dump
     SettingsUi.cs           // injection of the MCP section into the standard settings dialog
     Icons.cs                // preset previews, texture conversion to PNG
+    TextureEditor.cs        // editable image queries, bounded PNG I/O, history commands, backups
+    CustomItems.cs          // read-only installed custom-item discovery
+    HairGeometry.cs         // hair queries, scoped point snapshots and stock point-move commands
+    HairAppearance.cs       // native global hair outline width and material color history commands
+    HairBodyProbe.cs        // bounded read-only avatar triangle export for hair/body analysis
+    Expressions.cs          // native expression settings and temporary expression preview
+    FaceBridge.cs           // source probes, validation, embedded package history operations
+    FaceBridgeRuntime.cs    // owned renderer restoration and sampled morph/material fitting
   Commands/
     CommandServer.cs        // TCP 127.0.0.1:17890, string protocol, main-thread queue + response
     CommandDispatcher.cs    // thin router: queue, watchdog, method→handler registry, Test* hooks
@@ -54,6 +62,12 @@ plugin/VroidStudioMcp/
       LabelHandlers.cs      // labels/label_set
       I18nHandlers.cs       // i18ndump/i18nreload/i18nlang
       SettingsHandlers.cs   // settingsprobe/dump/state/toggle/edit
+      TextureHandlers.cs    // texture prepare/read/export/import/restore; checkpoint and verification
+      CustomItemHandlers.cs // custom_item_list
+      HairHandlers.cs       // hair list/get/move/restore; revision, rebuild and render checks
+      HairAppearanceHandlers.cs // checkpointed outline edits and appearance inspection
+      ExpressionHandlers.cs // raw expression list/set/preview; native range and revision checks
+      FaceBridgeHandlers.cs // face probe/import/status/restore; checkpoint and stable preview
   MCP/
     McpHost.cs              // Streamable HTTP JSON-RPC on HttpListener (127.0.0.1:17891/mcp)
   Tests/                    // one file per test; they call Editor + the shared harness
@@ -82,6 +96,12 @@ plugin/VroidStudioMcp/
   the Unsaved dialog.
 
 ## Tests
+
+The texture bridge runs in `tools/comfy-bridge/`, outside Unity. It owns ComfyUI uploads, workflow
+bindings, job polling, validated outputs and manifests. It calls the production MCP handlers;
+no network or inference waits enter the Unity command queue. `TextureRoundTripTest` exercises the
+same handlers in-process. See [runtime findings](texture-interop-findings.md) for type signatures,
+scope, evidence and remaining P1/P2 work.
 
 Tests are linear coroutines (their own driver, without Unity coroutines: `StartCoroutine` waits
 for the Il2Cpp enumerator). A test describes a sequence, the base steps it one step per frame on

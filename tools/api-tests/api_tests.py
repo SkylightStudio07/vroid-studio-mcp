@@ -301,7 +301,7 @@ class Harness:
             self.check("ui_screenshot.allowed-at-select", not err, text[:80])
         err, text = self.tool_text("open", {"path": "/no/such/model.vroid"})
         self.check("open.missing-file", err and "file not found" in text, text)
-        err, text = self.tool_text("open", {"path": "/tmp"})
+        err, text = self.tool_text("open", {"path": tempfile.gettempdir()})
         self.check("open.directory", err and ("not a file" in text or "file not found" in text), text)
 
     def suite_render(self):
@@ -375,7 +375,7 @@ class Harness:
 
         # save-as to a directory: error and fast (must not wait the full fallback timeout on failure)
         t0 = time.time()
-        err, text = self.tool_text("save", {"path": "/tmp"}, timeout=max(self.timeout, 30))
+        err, text = self.tool_text("save", {"path": tempfile.gettempdir()}, timeout=max(self.timeout, 30))
         dt = time.time() - t0
         self.check("save-badpath.error", err and "save failed" in text, text)
         self.check("save-badpath.fast", dt < 5.0, f"{dt:.2f}s")
@@ -465,7 +465,7 @@ class Harness:
         for name, tool, args in (
             ("open.missing", "open", {}),
             ("open.badtype", "open", {"path": ["x"]}),
-            ("open.dir", "open", {"path": "/tmp"}),
+            ("open.dir", "open", {"path": tempfile.gettempdir()}),
             ("open.nofile", "open", {"path": "/no/such/model.vroid"}),
             ("create.missing", "create", {}),
             ("create.badgender", "create", {"gender": "cat"}),
@@ -529,7 +529,7 @@ class Harness:
             # screenshot
             ("shot.badmode", "screenshot", {"mode": "nope"}, True),
             # save
-            ("save.badpath", "save", {"path": "/tmp"}, True),
+            ("save.badpath", "save", {"path": tempfile.gettempdir()}, True),
             ("save.missing-parent", "save", {"path": "/no/such/dir/m.vroid"}, True),
             # previews
             ("prev.list.missing", "preset_preview_list", {"section": "Face", "category": "Irises"}, True),

@@ -37,6 +37,7 @@ public static class ServerSettings
     // the RT onto the UI panel, so rendering larger and letting it downscale antialiases thin features
     // (the MToon outline) that MSAA alone leaves shimmering.
     internal static float RenderScale { get; private set; } = 2f;
+    internal static string TextureWorkspace { get; private set; } = "texture-workspace";
 
     // Live updates from the settings UI (validated; apply/restart the affected listener on change).
     internal static void SetEnabled(bool value) { Enabled = value; Apply(); }
@@ -64,6 +65,8 @@ public static class ServerSettings
             if (!File.Exists(FilePath)) { Save(); return; }
             using var doc = JsonDocument.Parse(File.ReadAllText(FilePath));
             var root = doc.RootElement;
+            if (root.TryGetProperty("texture_workspace", out var tw) && tw.ValueKind == JsonValueKind.String && !string.IsNullOrWhiteSpace(tw.GetString()))
+                TextureWorkspace = tw.GetString();
             if (root.TryGetProperty("enabled", out var en) && (en.ValueKind == JsonValueKind.True || en.ValueKind == JsonValueKind.False))
                 Enabled = en.GetBoolean();
             if (root.TryGetProperty("tcp", out var tcp) && tcp.ValueKind == JsonValueKind.String)
@@ -94,6 +97,7 @@ public static class ServerSettings
         try
         {
             var json = "{\n" +
+                       $"  \"texture_workspace\": {JsonSerializer.Serialize(TextureWorkspace)},\n" +
                        $"  \"enabled\": {(Enabled ? "true" : "false")},\n" +
                        $"  \"tcp\": {JsonSerializer.Serialize(TcpAddress)},\n" +
                        $"  \"mcp\": {JsonSerializer.Serialize(McpAddress)},\n" +

@@ -89,6 +89,9 @@ public static class VroidState
     // captured once and persist across screens (camera Start/OnEnable do not re-fire), so they stay.
     internal static void LeaveEdit()
     {
+        FaceBridgeRuntime.Invalidate();
+        TextureEditor.Invalidate();
+        HairGeometry.Invalidate();
         _inEdit = false; _modelReady = false; _modelUpdating = false;
         _editRootVm = null;
         _lastSavePath = null;

@@ -14,6 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="VRoidCore">
+      <HintPath>$(GameDir)/BepInEx/interop/VRoidCore.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="BepInEx.Core">
       <HintPath>$(GameDir)/BepInEx/core/BepInEx.Core.dll</HintPath>
       <Private>false</Private>

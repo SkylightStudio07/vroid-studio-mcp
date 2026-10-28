@@ -45,6 +45,7 @@ public static class Hooks
         ("VRoid.Studio.EditRootScreen.ViewModel", "set_EditMode"),
         ("VRoid.Studio.EditRootScreen.ViewModel", "OnScreenActivate"),
         ("VRoid.Studio.Engine.Model", "OnHistoryStatusUpdated"),
+        ("VRoid.Studio.Engine.Model", "OnTransferableGroupListUpdated"),
         ("VRoid.Studio.EditRootScreen.ViewModel", "Save"),
         ("VRoid.Studio.EditRootScreen.ViewModel", "EnterToPhotoBooth"),
         ("VRoid.Studio.EditRootScreen.ViewModel", "EnterToVRMExport"),
@@ -199,6 +200,8 @@ public static class Hooks
             var method = __originalMethod?.Name ?? "";
             var name = $"{__originalMethod?.DeclaringType?.FullName}.{method}";
             if (method == "UpdateSelectedPresets") Signals.PresetsUpdated();
+            if (method == "LoadAndReplaceTransferableGroup" || method == "ClearTransferableGroup" || method == "OnTransferableGroupListUpdated")
+            { TextureEditor.Invalidate(); HairGeometry.Invalidate(); }
 
             var sel = FindSelector(__instance);
             if (sel != null) Selectors.Track(sel, name);
