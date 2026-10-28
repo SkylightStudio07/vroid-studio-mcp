@@ -55,6 +55,15 @@ Use ComfyUI and available image generation actively when artwork is the bottlene
 UV/texture attempts leave the same structural error, change the representation before adding detail.
 The opposite applies too: do not rebuild working geometry to fix a color-only problem.
 
+For painted detail, actively use a capable image generation/editing model such as Duct Tape when
+available. Apply it to iris artwork, brows, liner/makeup masks, painted hair detail and clothing
+artwork as appropriate. Model choice can materially affect texture quality; the bundled low-step
+Qwen example verifies a pipeline, not a visual-quality ceiling. Generate/edit externally, review
+against the authoritative reference, fit the actual atlas, and use ComfyUI for composition/color/alpha
+work before importing. Record the actual generator and candidate; a named model is neither a likeness
+guarantee nor a bundled provider integration. A generated face redraw does not replace the reference
+or establish eye aperture, hair volume, accessory attachment or collision correctness.
+
 ## 3. Closed visual loop
 
 For each candidate:

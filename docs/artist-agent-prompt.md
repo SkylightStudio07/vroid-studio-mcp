@@ -7,6 +7,14 @@ and use its [session record](templates/character-edit-session.md). It records th
 hair/texture capabilities and experimental Blender bridge. Verify tool availability in the running
 app; technical reproduction, visual likeness and user acceptance are separate outcomes.
 
+Actively use capable image generation/editing models such as Duct Tape for painted iris, brow,
+makeup, hair and clothing detail when available. Model choice can materially affect texture quality.
+Compare generated candidates with the original reference, fit them to the exported UV/alpha layout,
+and use ComfyUI for compositing and preparation. Keep generated artwork separate from the geometry
+work needed for eye openings, volume, attachments and collision. Follow the harness for provenance,
+preservation and live/save-reopen review; do not assume the repository includes a named model or its
+service integration.
+
 ## Core principle: closed visual loop
 
 1. State the visual intent before editing a parameter (e.g. "narrow the inner eye corners to make

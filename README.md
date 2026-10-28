@@ -139,6 +139,14 @@ labels/                         readable preset names
 README.md  README.ko.md  README.ru.md  LICENSE
 ```
 
+### Do I need an installer?
+
+The current distribution format is a **plugin/data ZIP**; a standalone installer is not provided.
+Maintainers can assemble it with [the packaging script](tools/package-release.sh) after preparing
+the build prerequisites in [AGENTS.md](AGENTS.md#build-and-run). An installer could later help select
+the right app folder and create a launch shortcut. It would still need to load this plugin to
+display extended models; VRoid Studio and BepInEx remain separate prerequisites.
+
 ## Getting started
 
 Point your MCP client at the local endpoint. For example:
@@ -176,6 +184,25 @@ restore and `.vroid` save/reopen have been tested. A separate Python bridge supp
 API workflows, preview-only review, alpha validation and a deterministic mock mode.
 See [setup and commands](tools/comfy-bridge/README.md) and [verification/limits](docs/texture-interop-findings.md).
 Custom items currently support read-only discovery; import/apply and VRM export remain unimplemented.
+
+### Recommended image workflow
+
+**Actively use high-quality image generation/editing models, such as Duct Tape, for painted character
+detail.** Model choice can materially affect texture quality. Use them for iris artwork, brows,
+eyeliner and makeup masks, painted hair detail, and clothing artwork, guided by the original reference.
+The bundled Qwen workflow demonstrates the pipeline; it is not a claim of the best visual quality.
+
+1. Export the current texture and identify the exact part, UV placement and alpha mask to change.
+2. Generate/edit that part with a capable image model and compare candidates with the original
+   reference. Keep the reference as the design authority when reviewing generated interpretations.
+3. Fit the reviewed artwork to the actual atlas. Use ComfyUI for compositing, color matching and
+   alpha preparation, then import through the texture tools and inspect it on the model.
+4. Check front/angled views and save/reopen. Eye openings, hair volume, attachment and collision
+   still require native geometry controls or fitted Blender work.
+
+Duct Tape is an example external authoring choice, not a bundled model or a built-in provider
+integration. Use an available image tool or a configured ComfyUI workflow; access and model setup
+are separate. Generated images improve artwork, but do not automatically become fitted 3D parts.
 
 ## Documentation for developers
 
