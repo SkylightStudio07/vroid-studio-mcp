@@ -1,6 +1,6 @@
 # vroid-studio-mcp
 
-[English](README.md) | [Русский](README.ru.md)
+[한국어](README.ko.md) | [English](README.md) | [Русский](README.ru.md)
 
 ![vroid-studio-mcp promo](docs/media/promo.gif)
 
@@ -136,7 +136,7 @@ BepInEx/plugins/VroidStudioMcp.dll   the plugin
 BepInEx/config/BepInEx.cfg      BepInEx config with logging turned off
 i18n/                           corrected English labels
 labels/                         readable preset names
-README.md  README.ru.md  LICENSE
+README.md  README.ko.md  README.ru.md  LICENSE
 ```
 
 ## Getting started

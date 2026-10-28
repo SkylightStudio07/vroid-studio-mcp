@@ -34,7 +34,7 @@ cp plugin/VroidStudioMcp/bin/Release/VroidStudioMcp.dll "$stage/BepInEx/plugins/
 cp config/BepInEx.cfg "$stage/BepInEx/config/"
 cp data/i18n/*.json "$stage/i18n/"
 cp data/labels/*.json "$stage/labels/"
-cp README.md README.ru.md LICENSE "$stage/"
+cp README.md README.ko.md README.ru.md LICENSE "$stage/"
 
 mkdir -p dist
 out="$repo/dist/vroid-studio-mcp-$version.zip"

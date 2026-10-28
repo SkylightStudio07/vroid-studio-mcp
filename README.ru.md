@@ -1,6 +1,6 @@
 # vroid-studio-mcp
 
-[English](README.md) | [Русский](README.ru.md)
+[한국어](README.ko.md) | [English](README.md) | [Русский](README.ru.md)
 
 ![vroid-studio-mcp — промо](docs/media/promo.gif)
 
@@ -138,7 +138,7 @@ BepInEx/plugins/VroidStudioMcp.dll   плагин
 BepInEx/config/BepInEx.cfg      конфиг BepInEx с выключенными логами
 i18n/                           исправленные английские подписи
 labels/                         читаемые имена пресетов
-README.md  README.ru.md  LICENSE
+README.md  README.ko.md  README.ru.md  LICENSE
 ```
 
 ## Быстрый старт
